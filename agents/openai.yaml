@@ -1,4 +1,4 @@
 interface:
   display_name: "ChiHongshu"
   short_description: "按主题检索小红书，核读图文和评论，生成有原帖来源的中文分析报告"
-  default_prompt: "使用 $chihongshu，围绕我的主题和侧重点研究小红书；先让我选择浏览方式，再采集图文和评论并生成有来源的分析报告。"
+  default_prompt: "使用 $chihongshu，围绕我的主题研究小红书；先让我从七种方式中选择，确认指定环境已登录小红书，未登录先告知我，再采集图文和评论并生成有来源的分析报告。"

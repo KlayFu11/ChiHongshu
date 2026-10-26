@@ -21,16 +21,23 @@ ChiHongshu 是可迁移的 **Skill 和本地证据辅助工具**。浏览器由�
 
 ## 浏览方式
 
-每个新任务选择一次，已经指定就直接沿用；同一任务继续时不重问。
+用户在调用时指定，或在 Skill 第一次浏览操作前选择；选择前不连接浏览器。每个新任务选择一次，已经指定就直接沿用；同一任务继续时不重问。
 
 | 方式 | 前提 |
 |---|---|
-| web-access | 环境已有该 Skill 及其可用浏览器连接 |
-| Agent 原生网页浏览能力 | 宿主实际支持原帖、图像与评论交互；仅搜索摘要不够 |
-| Playwright MCP | 当前 MCP 工具可用，所连接浏览器具有所需登录状态 |
-| ego-browser | 环境已配置对应 Skill/CLI，按当前版本指南操作 |
+| [web-access](references/browsers/web-access.md) | 已安装对应 Skill，确认其共享连接及目标浏览器 |
+| [Playwright MCP](references/browsers/playwright-mcp.md) | 已配置 MCP，明确 extension/CDP/专用 profile 路径 |
+| [ego-browser](references/browsers/ego-browser.md) | 已配置 Skill/CLI，确认空间、profile 和任务页 |
+| [Vercel agent-browser](references/browsers/agent-browser.md) | 已有 CLI，优先连接用户指定的现有 CDP 浏览器；不默认复制 profile |
+| [Browser Use browser-harness](references/browsers/browser-harness.md) | 已有 CLI 与已授权的 Chrome，复用正确 daemon |
+| [Codex 官方 Chrome 扩展](references/browsers/codex-chrome.md) | 官方桌面端已连接扩展和目标 profile，并在本次聊天选择 Chrome |
+| [Claude Code 官方 Chrome 扩展](references/browsers/claude-code-chrome.md) | Claude Code 与 Claude in Chrome 账号/组织匹配，已连接所选浏览器 |
 
-只加载所选方式的说明。不会自动安装四套工具，也不会未经用户选择切换浏览器或账号。首次真实研究会先用小样本检查能力，再扩大采集。
+每种方式的需填信息、前提、命令或设置入口、注意事项见上表链接；共用信息见 [选择与登录协议](references/browser-selection.md)。仅加载所选适配，不自动安装工具，也不未经用户选择切换浏览器或账号。官方扩展依赖各自宿主，不能承诺在所有 Agent 中通用。
+
+优先复用用户指定的已登录环境，需要独立环境时先说明并由用户决定，不自动复制登录数据。**如果目标窗口/profile/空间尚未登录小红书，必须先告知用户并等待手动登录，复核成功后才检索、读帖和采集评论。** 扩展登录成功不等于小红书已登录；未知状态也不能当已登录。随后进行小样本能力检查，再扩大采集。
+
+新记录使用 `schemaVersion: 2` 并保留环境与登录检查结果；旧版 `native-browser` 仅兼容历史记录，不再提供为新任务选项。
 
 ## 默认研究规则
 
@@ -82,4 +89,4 @@ npm test
 npm run check
 ```
 
-测试材料均为明确标记的离线模拟，包含正常及失败场景，不是实际抓取的帖子。仓库不包含用户研究资料或凭证。四类适配目前是工作流指引，其真实站点能力须按工具、宿主和具体会话分别验证。
+测试材料均为明确标记的离线模拟，包含正常及失败场景，不是实际抓取的帖子。仓库不包含用户研究资料或凭证。七类适配是工作流指引；新增工具依据官方说明补充，未在本机安装或进行实时小红书验证。实际能力按工具、宿主和具体会话核对。

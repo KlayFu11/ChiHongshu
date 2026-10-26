@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 
 export const skillRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const defaults = Object.freeze({ minNotes: 20, maxNotes: 30, maxCandidates: 100, topLevelComments: 30, commentNodes: 100, supplementalRounds: 2, keywordsPerRound: 3, saturationWindow: 5 });
+export const browserModes = Object.freeze(['web-access', 'playwright-mcp', 'ego-browser', 'agent-browser', 'browser-harness', 'codex-chrome', 'claude-code-chrome']);
 export const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
 export const writeJson = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', 'utf8');
 export const isMain = url => Boolean(process.argv[1]) && path.resolve(process.argv[1]) === fileURLToPath(url);

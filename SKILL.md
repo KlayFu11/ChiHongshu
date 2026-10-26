@@ -10,13 +10,17 @@ description: 根据用户主题和侧重点，在小红书检索笔记、逐图�
 ## 启动与路由
 
 1. 提取主题、侧重点、重要关键词、可选背景与时间范围。仅追问会改变研究目标的关键缺失。用户已指定的关键词必须执行，可针对证据缺口扩展。
-2. 每个新任务让用户选一次浏览方式，已指定则沿用；续做不重问。只读所选适配：
+2. 在任何浏览器连接或网页操作前确定方式：用户可在调用时指定；未指定则先展示下列七项让用户选择。已指定沿用，续做不重问；选择前只整理主题与关键词。先读 [选择、必填信息与登录检查](references/browser-selection.md)，随后只读所选适配：
    - [web-access](references/browsers/web-access.md)
-   - [Agent 原生网页浏览能力](references/browsers/native-browser.md)，不是同名第三方 browser-use 产品
    - [Playwright MCP](references/browsers/playwright-mcp.md)
    - [ego-browser](references/browsers/ego-browser.md)
+   - [Vercel agent-browser](references/browsers/agent-browser.md)
+   - [Browser Use browser-harness](references/browsers/browser-harness.md)
+   - [Codex 官方 Chrome 扩展方案](references/browsers/codex-chrome.md)
+   - [Claude Code 官方 Chrome 扩展方案](references/browsers/claude-code-chrome.md)
 3. 读取 [研究协议](references/research-protocol.md)，拟定关键词、各词负责的问题及有效预算。用户的明确要求优先于默认值；要求之间有实质冲突时先澄清。
-4. 核对所选工具实际支持登录态、原帖正文、图片查看、评论展开和证据保存。先用一个小样本验证，再扩大；样本可计入研究。工具缺能力时说明并让用户选择替代，不能悄悄换浏览器、账号或工具。
+4. 优先复用用户指定的已登录环境。需要专用 profile 或远程/独立环境时，先说明并由用户决定，不自动复制登录数据。在选定环境中仅进行小红书登录检查；未登录时必须先告知具体浏览器/profile/空间，请用户手动登录并复核成功，再检索或读取笔记、图片、评论。登录状态未知时也不能开始采集，不能用公开可读页面替代这一步。
+5. 登录确认后再核对正文、逐图查看、评论展开和证据保存能力，用一个小样本检查后扩大；样本可计入研究。工具缺能力时说明并让用户选择替代，不能悄悄换浏览器、账号或工具。Chrome 扩展自身已登录不等于小红书已登录；官方宿主绑定的扩展不能假定可从任意 Agent 调用。
 
 ## 执行中的关键约束
 

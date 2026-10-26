@@ -4,10 +4,10 @@
 
 ## research.json
 
-- `schemaVersion: 1`；`status` 为 `draft`、`running`、`blocked`、`limited` 或 `complete`。
+- 新任务使用 `schemaVersion: 2`；`status` 为 `draft`、`running`、`blocked`、`limited` 或 `complete`。旧 v1 数据可原样校验并提示缺少历史登录记录，不自动迁移、不补造当时的登录检查。
 - `topic`、`focus[]`、`requiredKeywords[]` 描述用户需求；`collectedAt` 是带时区偏移的 ISO 时间，`timezone` 为任务所在 IANA 时区，例如 `Asia/Shanghai`。记录本次真实时间，不沿用示例年份。
 - `dateRange` 为 `null` 或闭区间 `{ "from": "YYYY-MM-DD", "to": "YYYY-MM-DD" }`，按本次时区的日历日期解释。
-- `browser` 记录选择的 `mode`、实际能力检查时间 `checkedAt`，以及 `capabilities` 中正文 `body`、图像 `images`、评论 `comments`、证据保存 `saveEvidence` 的实际结果。尚未检查保持 false。
+- `browser` 记录七项中选择的 `mode`、实际 `host` 和 `toolVersion`、`connection`（连接类型、非敏感目标说明及独立环境是否获用户接受）、`login`（实际小红书登录状态、检查时间/依据及未登录通知时间）。字段与流程见 [选择与登录检查](browser-selection.md)。`checkedAt` 和 `capabilities` 的正文 `body`、图像 `images`、评论 `comments`、证据保存 `saveEvidence` 是登录成功后的小样本实际结果，尚未检查保持 false。
 - `budgets` 字段见研究协议；修改默认数值时填 `budgetOverrideReason`，保存用户要求或任务开始时约定的理由。
 - `sampling.mode` 默认为 `purposeful`。严格模式为 `strict`，另填正整数 `strictTarget`、`strictUnit`（`eligible` 或 `positions`）及自然语言 `strictDefinition`。原始位置模式须保留单个快照从 1 开始无跳号的候选。
 - `queries[]` 每条含 `id`、`keyword`、`purpose`、实际 `order`、`round`（初始 0，补查 1/2）、`status`、`candidates[]`、有序 `sourceIds[]`。候选含 `sourceId`、`snapshot`、`position`、`outcome`（`included/excluded/unavailable`）和排除原因 `reason`。每词只保留每个候选的首次检查记录；额外重试细节可另存原始记录。

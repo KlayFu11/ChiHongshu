@@ -1,4 +1,8 @@
-# Agent 原生网页浏览能力适配
+# 旧 native-browser 记录兼容说明
+
+此文件仅用于解释 v1 历史记录，不再是新任务适配选项。新任务必须通过 [七种浏览方式选择](../browser-selection.md) 明确选择；两个官方扩展分别为 [Codex Chrome](codex-chrome.md) 与 [Claude Code Chrome](claude-code-chrome.md)。不能把旧字段自动映射到其中一个，也不为旧记录补写当时未检查的登录证据。
+
+以下保留旧口径，方便理解历史记录。
 
 指宿主直接提供的网页浏览工具，不是某个名为 browser-use 的第三方产品；不要求额外 Skill 或 MCP。使用当前实际可调用的工具名称和参数，不假定不同宿主具有相同 API。
 

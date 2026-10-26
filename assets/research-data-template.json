@@ -1,12 +1,20 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "status": "draft",
   "topic": "",
   "focus": [],
   "collectedAt": null,
   "timezone": null,
   "dateRange": null,
-  "browser": { "mode": null, "checkedAt": null, "capabilities": { "body": false, "images": false, "comments": false, "saveEvidence": false } },
+  "browser": {
+    "mode": null,
+    "host": null,
+    "toolVersion": null,
+    "connection": { "kind": null, "target": "", "independentEnvironmentApproved": false },
+    "login": { "status": "unknown", "checkedAt": null, "evidence": "", "userNotifiedAt": null },
+    "checkedAt": null,
+    "capabilities": { "body": false, "images": false, "comments": false, "saveEvidence": false }
+  },
   "budgets": { "minNotes": 20, "maxNotes": 30, "maxCandidates": 100, "topLevelComments": 30, "commentNodes": 100, "supplementalRounds": 2, "keywordsPerRound": 3, "saturationWindow": 5 },
   "budgetOverrideReason": "",
   "sampling": { "mode": "purposeful", "strictTarget": null, "strictDefinition": "" },

@@ -1,7 +1,7 @@
 // 目的：检查证据、预算、日期与报告的一致性；不证明作者真实或推导正确。
 import fs from 'node:fs';
 import path from 'node:path';
-import { defaults, readJson, writeJson, localFile, normalizeNoteUrl, dayAt, validDay, noteDate, parseDisplayDate, inRange, reportLinks, checkSecrets, nonempty, unique, isMain, evidenceDigest } from './lib.mjs';
+import { defaults, browserModes, readJson, writeJson, localFile, normalizeNoteUrl, dayAt, validDay, noteDate, parseDisplayDate, inRange, reportLinks, checkSecrets, nonempty, unique, isMain, evidenceDigest } from './lib.mjs';
 
 export function validateResearch(directory, { final = false, write = true } = {}) {
   const root = path.resolve(directory);
@@ -21,7 +21,7 @@ export function validateResearch(directory, { final = false, write = true } = {}
   require(Array.isArray(sources), 'sources must be an array');
   if (errors.length) return finish();
   for (const field of ['focus', 'requiredKeywords', 'queries', 'questions', 'claims', 'gaps', 'limitations']) require(Array.isArray(research[field]), `${field} must be an array`);
-  require(research.schemaVersion === 1, 'Unsupported schemaVersion');
+  require([1, 2].includes(research.schemaVersion), 'Unsupported schemaVersion');
   require(['draft', 'running', 'blocked', 'limited', 'complete'].includes(research.status), 'Invalid research status');
   require(research.budgets && typeof research.budgets === 'object', 'budgets must be an object');
   require(research.sampling && ['purposeful', 'strict'].includes(research.sampling.mode), 'sampling.mode must be purposeful or strict');
@@ -36,10 +36,39 @@ export function validateResearch(directory, { final = false, write = true } = {}
   if (sources.length || research.collectedAt || final) {
     try { dayAt(research.collectedAt, research.timezone); } catch { errors.push('Valid research collectedAt and timezone required'); }
   }
+  const allowedModes = research.schemaVersion === 1 ? [...browserModes, 'native-browser'] : browserModes;
+  if (research.schemaVersion === 1) {
+    warnings.push('Legacy schema v1: historical login checks are not recorded; do not infer a current authenticated session.');
+  } else {
+    const browser = research.browser ?? {};
+    const login = browser.login ?? {};
+    const hasActivity = sources.length > 0 || research.queries.some(q => q?.status !== 'planned');
+    const activeResearch = hasActivity && research.status !== 'blocked';
+    require(browser.mode == null || allowedModes.includes(browser.mode), 'Select a supported browser mode; native-browser is legacy-only');
+    require(['unknown', 'logged-in', 'logged-out', 'blocked'].includes(login.status), 'Invalid login status');
+    if (final || activeResearch) {
+      require(allowedModes.includes(browser.mode), 'Select a browser mode before research');
+      require(nonempty(browser.host), 'Browser host required');
+      require(login.status === 'logged-in', 'Xiaohongshu login must be confirmed before research');
+    }
+    if (login.status === 'logged-in') {
+      require(nonempty(login.evidence), 'Login check needs observed evidence, not an assumed session');
+      try { dayAt(login.checkedAt, research.timezone); } catch { errors.push('Login check needs a valid timestamp with explicit offset'); }
+    }
+    if (login.status === 'logged-out') {
+      try { dayAt(login.userNotifiedAt, research.timezone); } catch { errors.push('Logged-out state requires prior user notification timestamp'); }
+    }
+    if (final || hasActivity || ['logged-in', 'logged-out'].includes(login.status)) {
+      const connection = browser.connection ?? {};
+      require(['existing-session', 'dedicated-profile', 'remote-session'].includes(connection.kind), 'Select a connection kind');
+      require(nonempty(connection.target), 'A non-secret connection target description is required');
+      if (['dedicated-profile', 'remote-session'].includes(connection.kind)) require(connection.independentEnvironmentApproved === true, 'Independent environment needs user approval before use');
+    }
+  }
   if (final) {
     require(['complete', 'limited'].includes(research.status), 'Final report requires complete or limited status; blocked work remains a stage report');
     require(nonempty(research.topic) && research.focus.length > 0, 'Topic and focus required');
-    require(['web-access', 'native-browser', 'playwright-mcp', 'ego-browser'].includes(research.browser?.mode), 'Select a browser mode');
+    require(allowedModes.includes(research.browser?.mode), 'Select a browser mode');
     require(nonempty(research.browser?.checkedAt), 'Browser capability check required');
     for (const cap of ['body', 'images', 'comments', 'saveEvidence']) require(research.browser?.capabilities?.[cap] === true, `Browser capability missing: ${cap}`);
     require(sources.length > 0 && research.queries.length > 0 && research.questions.length > 0, 'Final report needs actual sources, queries and question coverage');

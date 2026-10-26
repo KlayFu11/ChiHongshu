@@ -21,7 +21,12 @@ export function makeFixture(t) {
     topic: '模拟研究', focus: ['模拟问题'], status: 'complete', collectedAt: '2026-10-26T12:00:00+08:00', timezone: 'Asia/Shanghai',
     dateRange: { from: '2026-01-01', to: '2026-10-26' }, requiredKeywords: ['模拟关键词'],
     budgetOverrideReason: '离线模拟用例，明确将阅读预算缩小为 1–2 篇，窗口 1 篇',
-    browser: { mode: 'native-browser', checkedAt: '2026-10-26T11:00:00+08:00', capabilities: { body: true, images: true, comments: true, saveEvidence: true } },
+    browser: {
+      mode: 'codex-chrome', host: '离线模拟 Codex 桌面端', toolVersion: 'offline-fixture',
+      connection: { kind: 'existing-session', target: '模拟 Chrome profile', independentEnvironmentApproved: false },
+      login: { status: 'logged-in', checkedAt: '2026-10-26T10:50:00+08:00', evidence: '模拟已登录页面，非真实浏览', userNotifiedAt: null },
+      checkedAt: '2026-10-26T11:00:00+08:00', capabilities: { body: true, images: true, comments: true, saveEvidence: true }
+    },
     queries: [{ id: 'q1', keyword: '模拟关键词', purpose: '回答模拟问题', order: '默认', round: 0, status: 'done', candidates: [{ sourceId: id, snapshot: 'simulated-1', position: 1, outcome: 'included' }], sourceIds: [id], stopReason: 'saturated', stopExplanation: '模拟停止条件', saturation: { directEvidence: true, crossCheckAttempted: true, counterSearchAttempted: true, rationale: '仅供测试，无真实研究结论', window: [{ sourceId: id, newInformation: false, reason: '模拟无新增信息' }] } }],
     questions: [{ question: '模拟问题', status: 'answered', summary: '模拟回答', sourceIds: [id] }],
     claims: [{ id: 'c1', summary: '模拟判断', sourceIds: [id] }],
